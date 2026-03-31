@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Livre des Rencontres · Larmor-Plage · Cœurs Solitaires</title>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f8f6ff; --card:#ffffff; --deep:#f0ecf9;
+  --gold:#9B59B6; --gold-light:#b07ccc; --gold-bg:rgba(155,89,182,0.07);
+  --cream:#1A1A1A; --muted:#7a6e8a; --border:rgba(155,89,182,0.18);
+  --homme:#9B59B6; --homme-light:#b07ccc; --homme-bg:rgba(155,89,182,0.07); --homme-border:rgba(155,89,182,0.22);
+  --femme:#E91E8C; --femme-light:#f04ca8; --femme-bg:rgba(233,30,140,0.07); --femme-border:rgba(233,30,140,0.22);
+  --green:#00BCD4; --green-bg:rgba(0,188,212,0.08); --green-border:rgba(0,188,212,0.25);
+  --violet:#9B59B6; --fuchsia:#E91E8C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);font-family:"Bai Jamjuree",sans-serif;color:var(--cream);min-height:100vh;background-image:radial-gradient(ellipse at 10% 10%,rgba(155,89,182,0.08) 0%,transparent 50%),radial-gradient(ellipse at 90% 90%,rgba(233,30,140,0.05) 0%,transparent 50%);overflow-x:hidden;}
+.hearts-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.flying-heart{position:absolute;font-size:18px;opacity:0;animation:flyHeart linear infinite;pointer-events:none;user-select:none;}
+@keyframes flyHeart{0%{transform:translateY(100vh) translateX(0) rotate(0deg) scale(0.5);opacity:0;}10%{opacity:0.5;}50%{transform:translateY(40vh) translateX(var(--drift)) rotate(15deg) scale(1);opacity:0.35;}90%{opacity:0.1;}100%{transform:translateY(-10vh) translateX(calc(var(--drift)*2)) rotate(30deg) scale(0.7);opacity:0;}}
+.nav-sections{position:sticky;top:0;z-index:100;background:rgba(248,246,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 12px;display:flex;align-items:stretch;justify-content:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;}
+.nav-s-btn{background:white;border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-family:"Bai Jamjuree",sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;flex-direction:column;align-items:center;gap:2px;min-width:80px;}
+.nav-icon{font-size:15px;line-height:1;}
+.nav-label{font-weight:600;font-size:11px;color:var(--cream);}
+.nav-sub{font-size:9px;color:var(--muted);letter-spacing:0.2px;}
+.nav-s-btn:hover .nav-label,.nav-s-btn.active .nav-label,.nav-s-btn:hover .nav-sub,.nav-s-btn.active .nav-sub{color:rgba(255,255,255,0.9);}
+.nav-s-btn:hover,.nav-s-btn.active{background:var(--violet);border-color:var(--violet);box-shadow:0 3px 12px rgba(155,89,182,0.3);}
+.btn-larmor{min-width:150px;background:linear-gradient(135deg,#9B59B6,#E91E8C);border-color:#9B59B6;color:white;box-shadow:0 4px 16px rgba(155,89,182,0.4);}
+.btn-larmor .nav-label,.btn-larmor .nav-sub{color:rgba(255,255,255,0.95);}
+.btn-larmor:hover,.btn-larmor.active{background:linear-gradient(135deg,#7d3f9e,#c4186f);border-color:#7d3f9e;box-shadow:0 5px 20px rgba(155,89,182,0.55);}
+.btn-merci:hover,.btn-merci.active{background:#E91E8C;border-color:#E91E8C;box-shadow:0 3px 12px rgba(233,30,140,0.3);}
+.section{display:none;position:relative;z-index:1;}
+.garde{max-width:680px;margin:0 auto;padding:40px 20px 60px;text-align:center;}
+.garde-logo-wrap{margin-bottom:20px;}
+.garde-brand{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,6vw,52px);font-weight:700;color:var(--cream);line-height:1.1;margin-bottom:6px;}
+.garde-brand em{color:var(--gold);font-style:italic;}
+.garde-tagline{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:var(--muted);margin-bottom:32px;letter-spacing:0.3px;}
+.lili-card{background:white;border-radius:8px;padding:28px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.08);text-align:left;margin-bottom:20px;}
+.lili-header{display:flex;align-items:center;gap:18px;margin-bottom:18px;}
+.lili-avatar{width:68px;height:68px;border-radius:50%;background:var(--gold-bg);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lili-name{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;color:var(--cream);line-height:1;margin-bottom:4px;}
+.lili-title{font-size:13px;color:var(--muted);line-height:1.5;}
+.lili-badges{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.lili-badge{background:var(--gold-bg);border:1px solid var(--border);border-radius:20px;padding:3px 11px;font-size:11px;color:var(--gold);font-weight:600;}
+.lili-bio{font-size:14px;color:var(--cream);line-height:1.9;margin-bottom:14px;}
+.lili-bio p+p{margin-top:8px;}
+.lili-bio em{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:16px;color:var(--gold);}
+.lili-coords{background:var(--deep);border-radius:6px;padding:13px 15px;font-size:12px;color:var(--muted);line-height:2.1;}
+.lili-coords strong{color:var(--cream);}
+.anon-card{background:white;border-radius:8px;padding:22px 26px;border:1px solid var(--border);border-left:4px solid var(--fuchsia);box-shadow:0 2px 10px rgba(0,0,0,0.05);text-align:left;margin-bottom:20px;}
+.anon-card p{font-size:14px;line-height:1.95;color:var(--cream);}
+.anon-card p+p{margin-top:10px;}
+.anon-card em{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:16px;color:var(--gold);}
+.mystere-card{background:linear-gradient(135deg,rgba(155,89,182,0.07),rgba(233,30,140,0.05));border-radius:8px;padding:22px 26px;border:1px solid var(--border);text-align:center;margin-bottom:20px;}
+.mystere-card .m-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:10px;}
+.mystere-card .m-title em{color:var(--fuchsia);font-style:italic;}
+.mystere-card .m-text{font-size:13px;line-height:1.95;color:var(--muted);margin-bottom:18px;}
+.mystere-card .m-text strong{color:var(--cream);}
+.mystere-cta{display:inline-block;background:linear-gradient(135deg,#9B59B6,#E91E8C);color:white;font-family:"Bai Jamjuree",sans-serif;font-size:14px;font-weight:600;padding:13px 32px;border-radius:50px;text-decoration:none;box-shadow:0 5px 20px rgba(155,89,182,0.35);transition:transform 0.2s,box-shadow 0.2s;border:none;cursor:pointer;}
+.mystere-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(155,89,182,0.45);}
+.pratique-card{background:white;border-radius:8px;padding:20px 26px;border:1px solid var(--border);border-left:4px solid #00BCD4;box-shadow:0 2px 10px rgba(0,0,0,0.05);text-align:left;margin-bottom:20px;}
+.pratique-card .prat-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;color:var(--cream);margin-bottom:12px;}
+.pratique-card .prat-title em{color:#00BCD4;font-style:italic;}
+.pratique-card .prat-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--cream);line-height:1.7;margin-bottom:8px;}
+.pratique-card .prat-item:last-child{margin-bottom:0;}
+.pratique-card .prat-icon{font-size:15px;flex-shrink:0;margin-top:2px;}
+.charte-card{background:white;border-radius:8px;padding:26px;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,0.05);text-align:left;}
+.charte-title{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:700;color:var(--cream);margin-bottom:4px;}
+.charte-title em{color:var(--gold);font-style:italic;}
+.charte-intro{font-size:13px;color:var(--muted);margin-bottom:16px;font-style:italic;}
+.charte-items{list-style:none;}
+.charte-item{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--deep);font-size:13px;line-height:1.6;color:var(--cream);}
+.charte-item:last-child{border-bottom:none;}
+.charte-emoji{font-size:17px;flex-shrink:0;margin-top:1px;}
+.event-section{max-width:680px;margin:0 auto;padding:32px 20px 60px;}
+.event-header{text-align:center;margin-bottom:28px;}
+.event-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.event-heading{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,5vw,38px);font-weight:700;line-height:1.1;margin-bottom:8px;}
+.event-heading em{font-style:italic;color:#9B59B6;}
+.event-meta{display:inline-flex;align-items:center;gap:8px;background:white;border:1px solid var(--border);border-radius:20px;padding:6px 16px;font-size:12px;color:var(--muted);margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.event-stats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;}
+.stat-pill{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;}
+.sp-h{background:var(--homme-bg);border:1px solid var(--homme-border);color:var(--homme);}
+.sp-f{background:var(--femme-bg);border:1px solid var(--femme-border);color:var(--femme);}
+.page{display:none;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);margin-bottom:20px;}
+.page.active{display:block;animation:pageIn 0.4s cubic-bezier(0.34,1.2,0.64,1) forwards;}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+.genre-stripe{height:5px;}
+.stripe-homme{background:linear-gradient(90deg,#9B59B6,#b07ccc);}
+.stripe-femme{background:linear-gradient(90deg,#E91E8C,#f04ca8);}
+.page-inner{padding:22px 22px 26px;position:relative;overflow:hidden;}
+.fili{position:absolute;font-size:220px;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none;font-family:serif;opacity:0.03;}
+.fili-h{color:var(--homme);}
+.fili-f{color:var(--femme);}
+.p-hero{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;position:relative;z-index:1;}
+.p-info{flex:1;}
+.p-name{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,5vw,32px);font-weight:700;line-height:1;color:var(--cream);margin-bottom:4px;}
+.p-meta{font-size:13px;color:var(--muted);margin-bottom:7px;}
+.p-meta strong{color:var(--cream);}
+.p-pill{display:inline-flex;align-items:center;gap:7px;border-radius:20px;padding:4px 11px;font-size:12px;}
+.pill-h{background:var(--homme-bg);border:1px solid var(--homme-border);}
+.pill-f{background:var(--femme-bg);border:1px solid var(--femme-border);}
+.p-num{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:700;line-height:1;}
+.pn-h{color:var(--homme);}
+.pn-f{color:var(--femme);}
+.p-type-name{font-size:12px;color:var(--cream);font-weight:500;}
+.p-type-sub{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:11px;color:var(--muted);}
+.p-div{border:none;border-top:1px solid;margin:12px 0;}
+.pd-h{border-color:rgba(155,89,182,0.18);}
+.pd-f{border-color:rgba(233,30,140,0.18);}
+.p-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:7px;}
+.p-mots{display:flex;flex-wrap:wrap;margin-bottom:11px;position:relative;z-index:1;}
+.p-mot{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:600;padding:2px 9px;position:relative;}
+.pm-h{color:var(--homme);}
+.pm-f{color:var(--femme);}
+.p-mot:not(:last-child)::after{content:"·";position:absolute;right:-3px;color:var(--muted);}
+.p-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;position:relative;z-index:1;}
+.p-tag{background:var(--deep);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--muted);}
+.pt-h{border:1px solid var(--homme-border);}
+.pt-f{border:1px solid var(--femme-border);}
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:11px;position:relative;z-index:1;}
+.p-gi{background:var(--deep);border-radius:4px;padding:8px 10px;}
+.p-gi.full{grid-column:1/-1;}
+.gi-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.gi-val{font-size:12px;color:var(--cream);line-height:1.5;}
+.p-rech{border-radius:4px;padding:12px 14px;font-size:13px;line-height:1.85;color:var(--cream);margin-bottom:12px;position:relative;z-index:1;font-style:italic;}
+.pr-h{background:var(--homme-bg);border:1px solid var(--homme-border);border-left:3px solid var(--homme);}
+.pr-f{background:var(--femme-bg);border:1px solid var(--femme-border);border-left:3px solid var(--femme);}
+.interet-wrap{position:relative;z-index:1;background:var(--deep);border-radius:6px;padding:14px 16px;}
+.interet-title{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:600;color:var(--cream);margin-bottom:10px;text-align:center;}
+.interet-btns{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
+.ibtn{border:1px solid var(--border);border-radius:24px;padding:8px 14px;font-family:"Bai Jamjuree",sans-serif;font-size:12px;font-weight:500;color:var(--muted);background:white;cursor:pointer;transition:all 0.18s;}
+.ibtn:hover{border-color:var(--violet);color:var(--violet);transform:translateY(-1px);}
+.ibtn-fire:hover{border-color:var(--fuchsia);color:var(--fuchsia);}
+.ibtn-selected{background:var(--violet);border-color:var(--violet);color:white;transform:translateY(-1px);box-shadow:0 3px 10px rgba(155,89,182,0.25);}
+.ibtn-fire.ibtn-selected{background:var(--fuchsia);border-color:var(--fuchsia);box-shadow:0 3px 10px rgba(233,30,140,0.25);}
+.interet-success{font-size:12px;color:#00a85a;text-align:center;padding:8px;background:rgba(0,168,90,0.07);border:1px solid rgba(0,168,90,0.25);border-radius:4px;margin-top:8px;}
+.p-cta{position:relative;z-index:1;}
+.p-cta-title{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:600;color:var(--cream);text-align:center;margin-bottom:9px;}
+.p-input{width:100%;background:var(--deep);border-radius:4px;padding:9px 12px;font-family:"Bai Jamjuree",sans-serif;font-size:13px;color:var(--cream);outline:none;margin-bottom:7px;transition:border-color 0.2s;}
+.p-input::placeholder{color:var(--muted);}
+.pi-h{border:1px solid var(--homme-border);}
+.pi-h:focus{border-color:var(--homme);}
+.pi-f{border:1px solid var(--femme-border);}
+.pi-f:focus{border-color:var(--femme);}
+.p-btn{width:100%;border:none;padding:11px;border-radius:4px;font-family:"Bai Jamjuree",sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;color:white;}
+.pb-h{background:var(--homme);}
+.pb-h:hover{background:var(--homme-light);transform:translateY(-1px);box-shadow:0 4px 14px rgba(155,89,182,0.25);}
+.pb-f{background:var(--femme);}
+.pb-f:hover{background:var(--femme-light);transform:translateY(-1px);box-shadow:0 4px 14px rgba(233,30,140,0.25);}
+.p-notice{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;}
+.p-success{display:none;border-radius:4px;padding:12px;font-size:13px;color:#00a85a;text-align:center;background:rgba(0,168,90,0.07);border:1px solid rgba(0,168,90,0.25);}
+.nav-profils{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:14px;}
+.nav-p-btn{width:46px;height:46px;border-radius:50%;background:white;border:1px solid var(--border);color:var(--gold);font-size:18px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+.nav-p-btn:hover{background:var(--gold-bg);border-color:var(--gold);transform:scale(1.05);}
+.nav-p-btn:disabled{opacity:0.25;cursor:not-allowed;transform:none;}
+.nav-p-info{text-align:center;}
+.nav-p-num{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1;}
+.nav-p-total{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.dots-wrap{display:flex;gap:5px;justify-content:center;margin-bottom:22px;flex-wrap:wrap;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--deep);border:1px solid var(--border);cursor:pointer;transition:all 0.25s;}
+.dot.ah{background:var(--homme);border-color:var(--homme);transform:scale(1.4);}
+.dot.af{background:var(--femme);border-color:var(--femme);transform:scale(1.4);}
+.livre-footer{text-align:center;font-size:12px;color:var(--muted);line-height:1.9;border-top:1px solid var(--border);padding:22px 20px;margin-top:8px;}
+.livre-footer strong{color:var(--gold);}
+.cta-final{max-width:580px;margin:0 auto;padding:40px 20px 80px;text-align:center;}
+.cta-final-box{background:linear-gradient(135deg,rgba(155,89,182,0.08) 0%,rgba(233,30,140,0.06) 100%);border:1px solid var(--border);border-radius:16px;padding:44px 28px;box-shadow:0 8px 40px rgba(155,89,182,0.12);}
+.cta-final-title{font-family:"Cormorant Garamond",serif;font-size:clamp(24px,5vw,38px);font-weight:700;color:var(--cream);line-height:1.15;margin-bottom:14px;}
+.cta-final-title em{color:var(--gold);font-style:italic;}
+.cta-final-text{font-size:15px;line-height:2;color:var(--cream);margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto;}
+.cta-final-btn{display:inline-block;background:linear-gradient(135deg,#9B59B6,#E91E8C);color:white;font-family:"Bai Jamjuree",sans-serif;font-size:15px;font-weight:600;padding:15px 38px;border-radius:50px;text-decoration:none;box-shadow:0 6px 24px rgba(155,89,182,0.35);transition:transform 0.2s,box-shadow 0.2s;letter-spacing:0.3px;}
+.cta-final-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(155,89,182,0.45);}
+.cta-final-sub{margin-top:18px;font-size:12px;color:var(--muted);}
+.cta-final-slogan{margin-top:28px;padding-top:22px;border-top:1px solid var(--border);font-family:"Cormorant Garamond",serif;font-style:italic;font-size:16px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="hearts-canvas" id="heartsCanvas"></div>
+
+<nav class="nav-sections">
+  <button class="nav-s-btn active" id="btn-garde">
+    <span class="nav-icon">❤️</span>
+    <span class="nav-label">Accueil</span>
+  </button>
+  <button class="nav-s-btn btn-larmor" id="btn-larmor">
+    <span class="nav-icon">👥</span>
+    <span class="nav-label">Voir les portraits</span>
+    <span class="nav-sub">2 avril · 12 profils</span>
+  </button>
+  <button class="nav-s-btn btn-merci" id="btn-merci">
+    <span class="nav-icon">🤍</span>
+    <span class="nav-label">Remerciements</span>
+    <span class="nav-sub">Un mot de Lili</span>
+  </button>
+</nav>
+
+<div class="section" id="sec-garde" style="display:block;">
+<div class="garde">
+  <div class="garde-logo-wrap">
+    <svg width="52" height="52" viewBox="0 0 56 56" fill="none">
+      <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="none" stroke="#9B59B6" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="url(#g1)" opacity="0.18"/>
+      <defs><linearGradient id="g1" x1="10" y1="18" x2="46" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#9B59B6"/><stop offset="1" stop-color="#E91E8C"/></linearGradient></defs>
+    </svg>
+  </div>
+  <div class="garde-brand">Les Cœurs<br><em>Solitaires</em></div>
+  <div class="garde-tagline">La rencontre mérite mieux qu’un algorithme.</div>
+
+  <div class="lili-card">
+    <div class="lili-header">
+      <div class="lili-avatar">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="13" r="7" stroke="#9B59B6" stroke-width="1.8" fill="none"/><path d="M4 32c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#9B59B6" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      </div>
+      <div>
+        <div class="lili-name">Lili Karantez<sup style="font-size:11px;">®</sup></div>
+        <div class="lili-title">Coach en relations amoureuses<br>Fondatrice des Cœurs Solitaires</div>
+      </div>
+    </div>
+    <div class="lili-badges">
+      <span class="lili-badge">2 500+ membres en Bretagne</span>
+      <span class="lili-badge">Lorient, Morbihan</span>
+      <span class="lili-badge">Soirées dans tout le Grand Ouest</span>
+    </div>
+    <div class="lili-bio">
+      <p>Ce livre est né de vos mots. Chaque profil ici porte une histoire, une envie, une sincérité rare.</p>
+      <p>Vous êtes là parce que vous croyez encore que la rencontre vraie est possible. <em>Vous avez raison.</em></p>
+    </div>
+    <div class="lili-coords">
+      <strong>Lili Karantez®</strong> · Les Cœurs Solitaires<br>
+      Centre des Affaires Lorient La Base · 1 rue Étienne d’Orves · 56100 Lorient<br>
+      lilikarantez@gmail.com · SIRET 40149331700069
+    </div>
+  </div>
+
+  <div class="anon-card">
+    <p>Ces profils sont volontairement anonymes. Les photos ne sont pas communiquées avant la soirée. Il est inutile de les demander. Ce n’est pas Tinder chez Les Cœurs Solitaires.</p>
+    <p>Ici, la rencontre se vit en vrai. Elle fait battre le cœur sans prévenir. Aucun algorithme ne l’aurait programmée.</p>
+    <p><em>Venez comme vous êtes. Laissez la magie opérer.</em></p>
+  </div>
+
+  <div class="mystere-card">
+    <div class="m-title">Certains profils seront là. <em>D’autres non.</em></div>
+    <div class="m-text">Vous venez de découvrir 12 histoires. <strong>Lesquelles serez-vous en train de vivre jeudi soir ?</strong><br>Il n’y a qu’une seule façon de le savoir. Les places sont limitées. La surprise, elle, est garantie.</div>
+    <button class="mystere-cta" id="btn-vers-portraits">→ Découvrir les portraits</button>
+  </div>
+
+  <div class="pratique-card">
+    <div class="prat-title">Infos <em>pratiques</em></div>
+    <div class="prat-item"><span class="prat-icon">📍</span><span><strong>Lieu :</strong> La Cabane de Port-Maria, Larmor-Plage</span></div>
+    <div class="prat-item"><span class="prat-icon">⏰</span><span><strong>Accueil :</strong> entre 19h00 et 19h25. La soirée démarre à 19h30 précises.</span></div>
+    <div class="prat-item"><span class="prat-icon">🍷</span><span><strong>À votre charge :</strong> boisson de courtoisie et planche apéro ou autre selon votre appétit.</span></div>
+  </div>
+
+  <div class="charte-card">
+    <div class="charte-title">La charte de <em>bienveillance</em></div>
+    <div class="charte-intro">Ce soir, vous partagez un espace rare. Quelques règles simples pour le préserver.</div>
+    <ul class="charte-items">
+      <li class="charte-item"><span class="charte-emoji">🤝</span><span>Le respect est la seule règle non négociable. Chaque personne présente a eu le courage de venir.</span></li>
+      <li class="charte-item"><span class="charte-emoji">👥</span><span>Ce livre est réservé à la communauté Les Cœurs Solitaires. Il ne se partage pas en dehors.</span></li>
+      <li class="charte-item"><span class="charte-emoji">💌</span><span>Si un profil vous touche, utilisez le formulaire discret. Lili fait le lien avec soin.</span></li>
+      <li class="charte-item"><span class="charte-emoji">🌱</span><span>Soyez curieux, soyez ouverts. Les belles rencontres arrivent souvent là où on ne les attendait pas.</span></li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<div class="section" id="sec-larmor">
+<div class="event-section">
+  <div class="event-header">
+    <div class="event-eyebrow">Soirée des Cœurs Solitaires</div>
+    <div class="event-heading"><em>Larmor-Plage</em></div>
+    <div class="event-meta">📅 Jeudi 2 avril 2026</div>
+    <div class="event-stats">
+      <span class="stat-pill sp-h">5 hommes</span>
+      <span class="stat-pill sp-f">7 femmes</span>
+    </div>
+  </div>
+  <div class="nav-profils">
+    <button class="nav-p-btn" id="prev-larmor" disabled>←</button>
+    <div class="nav-p-info">
+      <div class="nav-p-num"><span id="cur-larmor">1</span> / <span id="tot-larmor">12</span></div>
+      <div class="nav-p-total">Portrait</div>
+    </div>
+    <button class="nav-p-btn" id="next-larmor">→</button>
+  </div>
+  <div class="dots-wrap" id="dots-larmor"></div>
+  <div id="book-larmor">
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">L</span></div>
+          <div class="p-info">
+            <div class="p-name">Lili</div>
+            <div class="p-meta"><strong>50 ans</strong> · Pays d'Auray (20 km)</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">1</span>
+              <div><div class="p-type-name">La Passionnée des Grands Fonds</div><div class="p-type-sub">L'intensité comme boussole</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Discrète</span><span class="p-mot pm-f">Charmeuse</span><span class="p-mot pm-f">Sensible</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Connexion</span><span class="p-tag pt-f">Partage</span><span class="p-tag pt-f">Plaisir</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,65 m, brune avec des mèches grisonnantes, yeux verts, silhouette ronde et bien proportionnée</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">4 enfants, ne souhaite pas en avoir d'autres</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Passionnée</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Pays d'Auray (20 km)</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Respect, confiance, indépendance</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Jalousie maladive, addictions, violence</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Natation, plage, vélo, photo, musique, danser, balades au bord de la mer</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Un homme de plus de 1 m 70, brun ou crâne rasé. Le regard est la première chose qui l'attire. Elle rêve de voyages à deux et de découvrir des pays inconnus. 🌊</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-0">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-0-0" data-val="0" data-pseudo="Lili">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-0-1" data-val="1" data-pseudo="Lili">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-0-2" data-val="2" data-pseudo="Lili">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-0" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-0">
+            <input class="p-input pi-f" id="pren-larmor-0" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-0" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-0">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-0">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="homme">
+      <div class="genre-stripe stripe-homme"></div>
+      <div class="page-inner">
+        <div class="fili fili-h">♂</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #9B59B622;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#9B59B6;line-height:1;">J</span></div>
+          <div class="p-info">
+            <div class="p-name">Jakkri</div>
+            <div class="p-meta"><strong>40 ans</strong> · Lorient</div>
+            <div class="p-pill pill-h">
+              <span class="p-num pn-h">2</span>
+              <div><div class="p-type-name">L'Étincelle</div><div class="p-type-sub">La chaleur avant tout</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-h">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-h">Social</span><span class="p-mot pm-h">Sincère</span><span class="p-mot pm-h">Drôle</span></div>
+        <div class="p-label">L’amour pour lui c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-h">Sincérité</span><span class="p-tag pt-h">Fidélité</span><span class="p-tag pt-h">Confiance</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,70 m, 90 kg, asiatique, cheveux noirs, lunettes, sportif (karaté)</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">Pas d'enfants, un neveu et une petite nièce</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Lorient</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Fidélité, sincérité, confiance</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Infidélité, manque de confiance, profiteur</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Karaté, concerts, bars, festivals, balades</div></div>
+        </div>
+        <div class="p-label">Ce qu’il cherche</div>
+        <div class="p-rech pr-h">Une femme charmante, honnête, tendre, sociable, qui aime rire et bouger. Quelqu'un qui saura lui redonner confiance. 🌟</div>
+        <hr class="p-div pd-h">
+        <div class="interet-wrap" id="interet-1">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-1-0" data-val="0" data-pseudo="Jakkri">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-1-1" data-val="1" data-pseudo="Jakkri">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-1-2" data-val="2" data-pseudo="Jakkri">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-1" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-h" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-1">
+            <input class="p-input pi-h" id="pren-larmor-1" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-h" id="pour-larmor-1" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-h" id="btn-larmor-1">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-1">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="homme">
+      <div class="genre-stripe stripe-homme"></div>
+      <div class="page-inner">
+        <div class="fili fili-h">♂</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #9B59B622;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#9B59B6;line-height:1;">C</span></div>
+          <div class="p-info">
+            <div class="p-name">Claude</div>
+            <div class="p-meta"><strong>53 ans</strong> · Quimperlé</div>
+            <div class="p-pill pill-h">
+              <span class="p-num pn-h">3</span>
+              <div><div class="p-type-name">La Passionnée des Grands Fonds</div><div class="p-type-sub">L'intensité comme boussole</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-h">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-h">Sérieux</span><span class="p-mot pm-h">Réservé</span><span class="p-mot pm-h">Direct</span></div>
+        <div class="p-label">L’amour pour lui c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-h">Sentiments</span><span class="p-tag pt-h">Force</span><span class="p-tag pt-h">Douceur</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,80 m, 85 kg, type caucasien, yeux bleus, cheveux poivre et sel</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">2 enfants, n'en souhaite pas d'autres, accueillir oui</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Quimperlé</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Amour, sincérité, tendresse</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Jalousie maladive, manque d'hygiène, futilité</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Footing, balades en moto, pêche en eau douce, ses chiens</div></div>
+        </div>
+        <div class="p-label">Ce qu’il cherche</div>
+        <div class="p-rech pr-h">Un grand sourire. Quelqu'un de gentil, doux et rock'n roll. Son rêve : rencontrer une personne qui le comprend vraiment. 🏍️</div>
+        <hr class="p-div pd-h">
+        <div class="interet-wrap" id="interet-2">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-2-0" data-val="0" data-pseudo="Claude">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-2-1" data-val="1" data-pseudo="Claude">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-2-2" data-val="2" data-pseudo="Claude">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-2" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-h" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-2">
+            <input class="p-input pi-h" id="pren-larmor-2" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-h" id="pour-larmor-2" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-h" id="btn-larmor-2">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-2">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">M</span></div>
+          <div class="p-info">
+            <div class="p-name">Marie</div>
+            <div class="p-meta"><strong>55 ans</strong> · Lorient</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">4</span>
+              <div><div class="p-type-name">La Passionnée des Grands Fonds</div><div class="p-type-sub">L'intensité comme boussole</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Pétillante</span><span class="p-mot pm-f">Courageuse</span><span class="p-mot pm-f">Généreuse</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Sérénité</span><span class="p-tag pt-f">Douceur</span><span class="p-tag pt-f">Élan</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,70 m, mince, brune avec mèches miel, souvent bien habillée</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">Oui</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Lorient</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Respect, bienveillance, investissement</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Racisme, mensonges</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Sports, cinéma, musique</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Un bel homme qui la fait rire et lui fait découvrir le monde. Elle rêve d'être heureuse en couple, avec son âme sœur, peu importe où. 💫</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-3">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-3-0" data-val="0" data-pseudo="Marie">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-3-1" data-val="1" data-pseudo="Marie">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-3-2" data-val="2" data-pseudo="Marie">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-3" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-3">
+            <input class="p-input pi-f" id="pren-larmor-3" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-3" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-3">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-3">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">C</span></div>
+          <div class="p-info">
+            <div class="p-name">Cetes</div>
+            <div class="p-meta"><strong>46 ans</strong> · Guidel</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">5</span>
+              <div><div class="p-type-name">La Passionnée des Grands Fonds</div><div class="p-type-sub">L'intensité comme boussole</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Solaire</span><span class="p-mot pm-f">Patiente</span><span class="p-mot pm-f">À contre-courant</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Complicité</span><span class="p-tag pt-f">Passion</span><span class="p-tag pt-f">Partage</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,66 m, taille 38, silhouette sablier, yeux noisette, cheveux châtain long</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">1 fils de 18 ans. Préfère un partenaire sans enfants.</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Guidel</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Partage des valeurs, passion, feeling</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Addictions, manque de feeling, esprit rigide</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Sport, musculation, longe côte, bien-être, théâtre impro, sorties</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Un esprit vif, ouvert et sportif. Elle finalise sa longère et monte son cabinet de naturopathie. Sa vie est en mouvement. 🌿</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-4">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-4-0" data-val="0" data-pseudo="Cetes">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-4-1" data-val="1" data-pseudo="Cetes">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-4-2" data-val="2" data-pseudo="Cetes">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-4" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-4">
+            <input class="p-input pi-f" id="pren-larmor-4" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-4" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-4">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-4">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">T</span></div>
+          <div class="p-info">
+            <div class="p-name">Titi</div>
+            <div class="p-meta"><strong>48 ans</strong> · Hennebont</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">6</span>
+              <div><div class="p-type-name">La Passionnée des Grands Fonds</div><div class="p-type-sub">L'intensité comme boussole</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Timide</span><span class="p-mot pm-f">Souriante</span><span class="p-mot pm-f">À l'écoute</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Bonheur</span><span class="p-tag pt-f">Amour</span><span class="p-tag pt-f">Partage</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,55 m, 45 kg, yeux bleus, très beau sourire</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">Pas d'enfants, cela ne la dérange pas</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Hennebont</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Complicité, partage, simplicité</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Hypocrisie, mensonge</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Sport, sorties, balades</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Elle n'attend rien de particulier. Elle rêve d'une maison à partager avec quelqu'un de bienveillant, simple, à l'écoute. 🏡</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-5">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-5-0" data-val="0" data-pseudo="Titi">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-5-1" data-val="1" data-pseudo="Titi">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-5-2" data-val="2" data-pseudo="Titi">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-5" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-5">
+            <input class="p-input pi-f" id="pren-larmor-5" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-5" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-5">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-5">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="homme">
+      <div class="genre-stripe stripe-homme"></div>
+      <div class="page-inner">
+        <div class="fili fili-h">♂</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #9B59B622;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#9B59B6;line-height:1;">V</span></div>
+          <div class="p-info">
+            <div class="p-name">Vincent</div>
+            <div class="p-meta"><strong>54 ans</strong> · Hennebont (50 km)</div>
+            <div class="p-pill pill-h">
+              <span class="p-num pn-h">7</span>
+              <div><div class="p-type-name">L'Enraciné</div><div class="p-type-sub">La profondeur tranquille</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-h">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-h">Calme</span><span class="p-mot pm-h">Doux</span><span class="p-mot pm-h">Rêveur</span></div>
+        <div class="p-label">L’amour pour lui c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-h">Bonheur</span><span class="p-tag pt-h">Paix</span><span class="p-tag pt-h">Confiance</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,79 m, corpulence normale, yeux marron, cheveux poivre et sel</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">4 enfants (25, 22, 19 et 15 ans)</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Hennebont (50 km)</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Confiance, dialogue, partage</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Dénigrement, mensonge</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Nage avec palmes, chasse sous-marine, randonnée, cinéma</div></div>
+        </div>
+        <div class="p-label">Ce qu’il cherche</div>
+        <div class="p-rech pr-h">Une femme qui aime les choses simples. Marcher, nager, les pique-niques autant que les bons repas. Partager et imaginer de nouveaux projets. 🌊</div>
+        <hr class="p-div pd-h">
+        <div class="interet-wrap" id="interet-6">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-6-0" data-val="0" data-pseudo="Vincent">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-6-1" data-val="1" data-pseudo="Vincent">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-6-2" data-val="2" data-pseudo="Vincent">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-6" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-h" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-6">
+            <input class="p-input pi-h" id="pren-larmor-6" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-h" id="pour-larmor-6" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-h" id="btn-larmor-6">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-6">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">V</span></div>
+          <div class="p-info">
+            <div class="p-name">Violette</div>
+            <div class="p-meta"><strong>63 ans</strong> · Hennebont (50 km)</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">8</span>
+              <div><div class="p-type-name">L'Enthousiaste</div><div class="p-type-sub">La joie de vivre en étendard</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Souriante</span><span class="p-mot pm-f">Optimiste</span><span class="p-mot pm-f">Amusante</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Douceur</span><span class="p-tag pt-f">Échanges</span><span class="p-tag pt-f">Week-ends</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,69 m, mince, cheveux poivre et sel naturels, allure sportive</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">Pas d'enfants, adore ses neveux et nièces</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Indépendante avec envie de partager</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Hennebont (50 km)</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Confiance, communication, projets</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Mauvaise hygiène, manque de respect, manque de communication</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Lecture, randonnée, cuisine, accordéon, jardinage, concerts, cinéma</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Un homme plutôt grand, sportif, dynamique, sincère et attentionné. Elle rêve de beaux week-ends à deux et de vacances partagées. 🎶</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-7">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-7-0" data-val="0" data-pseudo="Violette">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-7-1" data-val="1" data-pseudo="Violette">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-7-2" data-val="2" data-pseudo="Violette">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-7" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-7">
+            <input class="p-input pi-f" id="pren-larmor-7" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-7" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-7">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-7">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">B</span></div>
+          <div class="p-info">
+            <div class="p-name">Brigitte</div>
+            <div class="p-meta"><strong>65 ans</strong> · Auray</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">9</span>
+              <div><div class="p-type-name">L'Enracinée</div><div class="p-type-sub">La solidité comme socle</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Dynamique</span><span class="p-mot pm-f">Pétillante</span><span class="p-mot pm-f">Cultivée</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Sérénité</span><span class="p-tag pt-f">Joie</span><span class="p-tag pt-f">Confiance</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,65 m, brune, ni grosse ni mince, allure sportive</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">2 enfants</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Indépendante</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Auray</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Confiance, sérénité, joie</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Changeant, jaloux, en surpoids</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Rando, vélo, yoga, voyages, lecture, cinéma, théâtre, concerts</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Une allure sportive et un regard doux avant tout. Un partenaire attentionné, stable, décontracté. Elle se voit en couple avec quelqu'un de doux et joyeux. 🌿</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-8">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-8-0" data-val="0" data-pseudo="Brigitte">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-8-1" data-val="1" data-pseudo="Brigitte">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-8-2" data-val="2" data-pseudo="Brigitte">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-8" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-8">
+            <input class="p-input pi-f" id="pren-larmor-8" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-8" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-8">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-8">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="homme">
+      <div class="genre-stripe stripe-homme"></div>
+      <div class="page-inner">
+        <div class="fili fili-h">♂</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #9B59B622;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#9B59B6;line-height:1;">G</span></div>
+          <div class="p-info">
+            <div class="p-name">Gilles</div>
+            <div class="p-meta"><strong>64 ans</strong> · Lorient (70 km)</div>
+            <div class="p-pill pill-h">
+              <span class="p-num pn-h">10</span>
+              <div><div class="p-type-name">L'Enraciné</div><div class="p-type-sub">La profondeur tranquille</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-h">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-h">Positif</span><span class="p-mot pm-h">Sympathique</span><span class="p-mot pm-h">Voyageur</span></div>
+        <div class="p-label">L’amour pour lui c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-h">Tendresse</span><span class="p-tag pt-h">Complicité</span><span class="p-tag pt-h">Joie</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,70 m, 67 kg, cheveux châtain gris, yeux bleus foncés, silhouette fine</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">1 fille majeure, ne souhaite plus d'enfants</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Passionné</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Lorient (70 km)</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Complicité, tendresse, confiance</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Manque de confiance, mensonge</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Voyages, randonnée, musique, jardinage, cinéma, théâtre</div></div>
+        </div>
+        <div class="p-label">Ce qu’il cherche</div>
+        <div class="p-rech pr-h">Un sourire, une joie de vivre et une belle présence. Il rêve d'être vraiment heureux en couple et de partir ensemble loin pour de belles vacances. 🌍</div>
+        <hr class="p-div pd-h">
+        <div class="interet-wrap" id="interet-9">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-9-0" data-val="0" data-pseudo="Gilles">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-9-1" data-val="1" data-pseudo="Gilles">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-9-2" data-val="2" data-pseudo="Gilles">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-9" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-h" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-9">
+            <input class="p-input pi-h" id="pren-larmor-9" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-h" id="pour-larmor-9" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-h" id="btn-larmor-9">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-9">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="femme">
+      <div class="genre-stripe stripe-femme"></div>
+      <div class="page-inner">
+        <div class="fili fili-f">♀</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(233,30,140,0.08);border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #E91E8C22;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E91E8C;line-height:1;">M</span></div>
+          <div class="p-info">
+            <div class="p-name">Mary</div>
+            <div class="p-meta"><strong>59 ans</strong> · Quimperlé (Finistère)</div>
+            <div class="p-pill pill-f">
+              <span class="p-num pn-f">11</span>
+              <div><div class="p-type-name">L'Enracinée</div><div class="p-type-sub">La solidité comme socle</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-f">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-f">Sensible</span><span class="p-mot pm-f">Déterminée</span><span class="p-mot pm-f">Authentique</span></div>
+        <div class="p-label">L’amour pour elle c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-f">Complicité</span><span class="p-tag pt-f">Confiance</span><span class="p-tag pt-f">Partage</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,62 m, 52 kg, métisse créole, style naturel et élégant, paraît plus jeune que son âge</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">2 grandes filles. Ouverte à quelqu'un ayant de grands enfants.</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Tranquille</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Quimperlé (Finistère)</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Respect, communication, sincérité</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Mensonge, manque de respect, instabilité</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Danse (salsa, bachata, kizomba, tango), musique, piano, culture, voyage, cinéma, méditation</div></div>
+        </div>
+        <div class="p-label">Ce qu’elle cherche</div>
+        <div class="p-rech pr-f">Un homme avec du charme, une présence naturelle et une énergie vivante. Dynamique, esprit ouvert et curieux, cultivé et capable de profondeur. Une affinité avec la danse ou la musique est un vrai plus. Son rêve : partager la danse et une vraie complicité avec son compagnon. 💃</div>
+        <hr class="p-div pd-f">
+        <div class="interet-wrap" id="interet-10">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-10-0" data-val="0" data-pseudo="Mary">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-10-1" data-val="1" data-pseudo="Mary">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-10-2" data-val="2" data-pseudo="Mary">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-10" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-f" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-10">
+            <input class="p-input pi-f" id="pren-larmor-10" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-f" id="pour-larmor-10" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-f" id="btn-larmor-10">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-10">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" data-genre="homme">
+      <div class="genre-stripe stripe-homme"></div>
+      <div class="page-inner">
+        <div class="fili fili-h">♂</div>
+        <div class="p-hero">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px #9B59B622;"><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#9B59B6;line-height:1;">R</span></div>
+          <div class="p-info">
+            <div class="p-name">Régis</div>
+            <div class="p-meta"><strong>53 ans</strong> · Morbihan</div>
+            <div class="p-pill pill-h">
+              <span class="p-num pn-h">12</span>
+              <div><div class="p-type-name">L'Étincelle</div><div class="p-type-sub">La chaleur avant tout</div></div>
+            </div>
+          </div>
+        </div>
+        <hr class="p-div pd-h">
+        <div class="p-label">En 3 mots</div>
+        <div class="p-mots"><span class="p-mot pm-h">Curieux</span><span class="p-mot pm-h">Enthousiaste</span><span class="p-mot pm-h">Honnête</span></div>
+        <div class="p-label">L’amour pour lui c’est…</div>
+        <div class="p-tags"><span class="p-tag pt-h">Romantisme</span><span class="p-tag pt-h">Voyage</span><span class="p-tag pt-h">Liens</span></div>
+        <div class="p-grid">
+          <div class="p-gi"><div class="gi-label">Physique</div><div class="gi-val">1,93 m, 95 kg, grande allure</div></div>
+          <div class="p-gi"><div class="gi-label">Enfants</div><div class="gi-val">1 fils de 14 ans. N'en souhaite pas d'autres, mais prêt à en accueillir.</div></div>
+          <div class="p-gi"><div class="gi-label">Rythme</div><div class="gi-val">Passionné</div></div>
+          <div class="p-gi"><div class="gi-label">Zone</div><div class="gi-val">Morbihan</div></div>
+          <div class="p-gi full"><div class="gi-label">Priorités couple</div><div class="gi-val">Dialogue, fidélité, honnêteté</div></div>
+          <div class="p-gi full"><div class="gi-label">Rédhibitoire</div><div class="gi-val">Manque de soin, malhonnêteté, absence de dialogue</div></div>
+          <div class="p-gi full"><div class="gi-label">Aime</div><div class="gi-val">Photo, la mer, les châteaux, la danse</div></div>
+        </div>
+        <div class="p-label">Ce qu’il cherche</div>
+        <div class="p-rech pr-h">Quelqu'un de romantique. Dans 5 ans avec son amoureuse. Son rêve le plus fou : aller dans l'espace. 🚀</div>
+        <hr class="p-div pd-h">
+        <div class="interet-wrap" id="interet-11">
+          <div class="interet-title">Ce profil vous intéresse ?</div>
+          <div class="interet-btns">
+            <button class="ibtn" id="ibtn-11-0" data-val="0" data-pseudo="R\u00e9gis">😐 Pourquoi pas</button>
+            <button class="ibtn" id="ibtn-11-1" data-val="1" data-pseudo="R\u00e9gis">😊 Intéressé·e</button>
+            <button class="ibtn ibtn-fire" id="ibtn-11-2" data-val="2" data-pseudo="R\u00e9gis">🔥 Coup de cœur</button>
+          </div>
+          <div class="interet-success" id="isuc-11" style="display:none;">✅ Lili a été notifiée. Elle fera le lien avec discrétion. 💛</div>
+          <p class="p-notice" style="margin-top:8px;">Vos données nous sont confiées. Elles ne seront jamais vendues, jamais partagées.</p>
+        </div>
+        <hr class="p-div pd-h" style="margin-top:14px;">
+        <div class="p-cta">
+          <div class="p-cta-title">💌 Vous voulez aller plus loin ?</div>
+          <div id="form-larmor-11">
+            <input class="p-input pi-h" id="pren-larmor-11" type="text" placeholder="Votre prénom *">
+            <textarea class="p-input pi-h" id="pour-larmor-11" rows="3" style="resize:vertical;line-height:1.6" placeholder="Pourquoi ce profil vous attire…"></textarea>
+            <button class="p-btn pb-h" id="btn-larmor-11">Envoyer un message à Lili Karantez →</button>
+            <p class="p-notice" style="margin-top:6px;">Confidentiel · Lili fait le lien avec bienveillance</p>
+          </div>
+          <div class="p-success" id="suc-larmor-11">✅ Message envoyé ! Lili vous contactera très bientôt. 💛</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-profils" style="margin-top:8px;">
+    <button class="nav-p-btn" id="prev-larmor2" disabled>←</button>
+    <div class="nav-p-info">
+      <div class="nav-p-num"><span id="cur-larmor2">1</span> / <span id="tot-larmor2">12</span></div>
+      <div class="nav-p-total">Portrait</div>
+    </div>
+    <button class="nav-p-btn" id="next-larmor2">→</button>
+  </div>
+  <div class="livre-footer">
+    <strong>Lili Karantez®</strong> · Les Cœurs Solitaires · lilikarantez@gmail.com · SIRET 40149331700069
+  </div>
+</div>
+</div>
+
+<div class="section" id="sec-merci">
+<div class="event-section" style="max-width:580px;margin:0 auto;padding:40px 20px 0;text-align:center;">
+  <svg width="46" height="46" viewBox="0 0 56 56" fill="none" style="margin-bottom:14px;">
+    <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="none" stroke="#9B59B6" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="url(#g2)" opacity="0.18"/>
+    <defs><linearGradient id="g2" x1="10" y1="18" x2="46" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#9B59B6"/><stop offset="1" stop-color="#E91E8C"/></linearGradient></defs>
+  </svg>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,40px);font-weight:700;color:#1A1A1A;line-height:1.15;margin-bottom:8px;">Merci d’être <em style="color:#9B59B6;font-style:italic;">là</em></div>
+  <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px;">Un mot de Lili Karantez</div>
+  <div style="background:white;border-radius:10px;padding:30px 28px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(155,89,182,0.08);text-align:left;margin-bottom:24px;">
+    <div style="font-size:15px;line-height:2;color:#1A1A1A;">
+      <p style="margin-bottom:16px;">Vous avez choisi de vous montrer tels que vous êtes, avec sincérité et courage. Ce n’est pas rien.</p>
+      <p style="margin-bottom:16px;">Ce livre est né de vos mots, de vos envies, de ce que vous portez en vous et que vous espérez partager un jour avec quelqu’un.</p>
+      <p style="margin-bottom:16px;">Quelle que soit la suite de cette soirée, vous avez fait le premier pas. Et c’est souvent là que tout commence.</p>
+      <p style="margin-bottom:0;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#9B59B6;">Avec tout mon cœur, merci.</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:13px;border-top:1px solid var(--border);padding-top:18px;margin-top:20px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:rgba(155,89,182,0.08);border:2px solid #9B59B6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="24" height="24" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="13" r="7" stroke="#9B59B6" stroke-width="1.8" fill="none"/><path d="M4 32c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#9B59B6" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:14px;color:#1A1A1A;">Lili Karantez®</div>
+        <div style="font-size:12px;color:var(--muted);">Coach en relations amoureuses · Fondatrice des Cœurs Solitaires</div>
+        <div style="font-size:12px;color:var(--muted);">2 500+ membres en Bretagne</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cta-final">
+  <div class="cta-final-box">
+    <svg width="40" height="40" viewBox="0 0 56 56" fill="none" style="margin-bottom:18px;">
+      <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M28 48s-18-12-18-24a10 10 0 0 1 18-6 10 10 0 0 1 18 6c0 12-18 24-18 24z" fill="url(#g3)" opacity="0.2"/>
+      <defs><linearGradient id="g3" x1="10" y1="18" x2="46" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#9B59B6"/><stop offset="1" stop-color="#E91E8C"/></linearGradient></defs>
+    </svg>
+    <div class="cta-final-title">Pas encore inscrit·e à<br><em>Larmor-Plage ?</em></div>
+    <div class="cta-final-text">Vous venez de parcourir ces profils. Vous avez ressenti quelque chose. Ne laissez pas passer cette soirée. Les places sont limitées. La rencontre, elle, n’attend pas.</div>
+    <a href="https://ypl.me/PKY" target="_blank" class="cta-final-btn">Je réserve ma place</a>
+    <div class="cta-final-sub">Réservation via Yurplan · Jeudi 2 avril 2026 · La Cabane de Port-Maria · Larmor-Plage</div>
+    <div class="cta-final-slogan">La rencontre mérite mieux qu’un algorithme.</div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-top:22px;line-height:2;">
+    © 2026 Lili Karantez — Toute reproduction interdite, même partielle.<br>
+    SIRET 40149331700069 · lilikarantez@gmail.com
+  </div>
+</div>
+</div>
+
+<div style="height:32px;"></div>
+
+<div style="max-width:580px;margin:0 auto;padding:0 20px 0;">
+  <div style="background:linear-gradient(135deg,rgba(0,188,212,0.07),rgba(155,89,182,0.06));border:1px solid rgba(0,188,212,0.25);border-radius:16px;padding:36px 28px;text-align:center;margin-bottom:0;">
+    <svg width="38" height="38" viewBox="0 0 56 56" fill="none" style="margin-bottom:14px;">
+      <path d="M28 10 L34 22 L48 24 L38 34 L40 48 L28 42 L16 48 L18 34 L8 24 L22 22 Z" fill="none" stroke="#00BCD4" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M28 10 L34 22 L48 24 L38 34 L40 48 L28 42 L16 48 L18 34 L8 24 L22 22 Z" fill="url(#gv)" opacity="0.15"/>
+      <defs><linearGradient id="gv" x1="8" y1="10" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#00BCD4"/><stop offset="1" stop-color="#9B59B6"/></linearGradient></defs>
+    </svg>
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Le grand rendez-vous</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,32px);font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:12px;">Salon de la Rencontre<br><em style="color:#00BCD4;font-style:italic;">Vannes — 6 juin 2026</em></div>
+    <div style="font-size:14px;line-height:1.95;color:var(--cream);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;">Une journée entière consacrée à la rencontre vraie. Des conférences, des échanges, des rencontres. Le grand rendez-vous des Cœurs Solitaires en Bretagne.</div>
+    <a href="https://ypl.me/PUR" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#00BCD4,#9B59B6);color:white;font-family:'Bai Jamjuree',sans-serif;font-size:14px;font-weight:600;padding:13px 32px;border-radius:50px;text-decoration:none;box-shadow:0 5px 20px rgba(0,188,212,0.3);transition:transform 0.2s,box-shadow 0.2s;letter-spacing:0.3px;" id="btn-vannes">Je découvre le salon</a>
+    <div style="margin-top:14px;font-size:11px;color:var(--muted);">Maison Flow · Vannes · Inscription via Yurplan</div>
+  </div>
+</div>
+<div style="height:40px;"></div>
+
+<a href="https://wa.me/33633054456" target="_blank" title="Contacter Lili sur WhatsApp" id="wa-btn"
+   style="position:fixed;bottom:24px;right:24px;z-index:9999;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.524 5.847L.057 23.882l6.197-1.624A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.866 9.866 0 01-5.031-1.378l-.361-.214-3.741.981 1-3.636-.235-.374A9.867 9.867 0 012.106 12C2.106 6.727 6.727 2.106 12 2.106S21.894 6.727 21.894 12 17.273 21.894 12 21.894z"/>
+  </svg>
+</a>
+
+<script>
+(function() {
+  var hearts = ['❤️','💖','💕','💓'];
+  var canvas = document.getElementById('heartsCanvas');
+  for (var i = 0; i < 10; i++) {
+    (function(i) {
+      var h = document.createElement('div');
+      h.className = 'flying-heart';
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      h.style.cssText = 'left:' + (5+Math.random()*90) + '%;font-size:' + (12+Math.random()*14) + 'px;animation-duration:' + (10+Math.random()*14) + 's;animation-delay:' + (Math.random()*16) + 's;--drift:' + ((Math.random()-0.5)*100) + 'px;';
+      canvas.appendChild(h);
+    })(i);
+  }
+})();
+
+var state = { larmor: 0 };
+
+function showSection(key) {
+  ['sec-garde','sec-larmor','sec-merci'].forEach(function(id) { document.getElementById(id).style.display = 'none'; });
+  document.getElementById('sec-' + key).style.display = 'block';
+  document.querySelectorAll('.nav-s-btn').forEach(function(b) { b.classList.remove('active'); });
+  var btn = document.querySelector('.btn-' + key) || document.getElementById('btn-' + key);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function initDots(book) {
+  var pages = document.querySelectorAll('#book-' + book + ' .page');
+  var dotsEl = document.getElementById('dots-' + book);
+  dotsEl.innerHTML = '';
+  pages.forEach(function(p, i) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    (function(idx) { d.addEventListener('click', function() { goTo(book, idx); }); })(i);
+    dotsEl.appendChild(d);
+  });
+  document.getElementById('tot-' + book).textContent = pages.length;
+  try { document.getElementById('tot-' + book + '2').textContent = pages.length; } catch(e) {}
+  updateNav(book);
+}
+
+function nav(book, dir) {
+  var pages = document.querySelectorAll('#book-' + book + ' .page');
+  var next = state[book] + dir;
+  if (next < 0 || next >= pages.length) return;
+  goTo(book, next);
+}
+
+function goTo(book, idx) {
+  var pages = document.querySelectorAll('#book-' + book + ' .page');
+  if (idx === state[book]) return;
+  pages[state[book]].style.display = 'none';
+  pages[state[book]].classList.remove('active');
+  state[book] = idx;
+  pages[idx].style.display = 'block';
+  pages[idx].classList.add('active');
+  updateNav(book);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateNav(book) {
+  var pages = document.querySelectorAll('#book-' + book + ' .page');
+  var cur = state[book];
+  ['cur-' + book, 'cur-' + book + '2'].forEach(function(id) { var el = document.getElementById(id); if (el) el.textContent = cur + 1; });
+  ['prev-' + book, 'prev-' + book + '2'].forEach(function(id) { var el = document.getElementById(id); if (el) el.disabled = cur === 0; });
+  ['next-' + book, 'next-' + book + '2'].forEach(function(id) { var el = document.getElementById(id); if (el) el.disabled = cur === pages.length - 1; });
+  var dots = document.querySelectorAll('#dots-' + book + ' .dot');
+  dots.forEach(function(d, i) { d.className = 'dot'; if (i === cur) d.classList.add(pages[i].dataset.genre === 'homme' ? 'ah' : 'af'); });
+}
+
+function envoyer(book, idx, profil) {
+  var pren = document.getElementById('pren-' + book + '-' + idx).value.trim();
+  var pour = document.getElementById('pour-' + book + '-' + idx).value.trim();
+  if (!pren) document.getElementById('pren-' + book + '-' + idx).style.borderColor = '#E91E8C';
+  if (!pour) document.getElementById('pour-' + book + '-' + idx).style.borderColor = '#E91E8C';
+  if (!pren || !pour) return;
+  var fd = new FormData();
+  fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+  fd.append('subject', 'Larmor-Plage • Message de ' + pren + ' pour ' + profil);
+  fd.append('de', pren);
+  fd.append('profil_concerne', profil);
+  fd.append('message', pour);
+  fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+  fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+    document.getElementById('form-' + book + '-' + idx).style.display = 'none';
+    document.getElementById('suc-' + book + '-' + idx).style.display = 'block';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btn-garde').addEventListener('click', function() { showSection('garde'); });
+  document.getElementById('btn-larmor').addEventListener('click', function() { showSection('larmor'); });
+  document.getElementById('btn-merci').addEventListener('click', function() { showSection('merci'); });
+  document.getElementById('btn-vers-portraits').addEventListener('click', function() { showSection('larmor'); });
+  document.getElementById('prev-larmor').addEventListener('click', function() { nav('larmor', -1); });
+  document.getElementById('next-larmor').addEventListener('click', function() { nav('larmor', 1); });
+  document.getElementById('prev-larmor2').addEventListener('click', function() { nav('larmor', -1); });
+  document.getElementById('next-larmor2').addEventListener('click', function() { nav('larmor', 1); });
+  document.getElementById('wa-btn').addEventListener('mouseover', function() { this.style.transform = 'scale(1.1)'; });
+  document.getElementById('wa-btn').addEventListener('mouseout', function() { this.style.transform = 'scale(1)'; });
+
+    document.getElementById("btn-larmor-0").addEventListener("click", function() { envoyer("larmor", 0, "Lili"); });
+    (function() {
+      var btns0 = document.querySelectorAll('#interet-0 .ibtn');
+      btns0.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns0.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-0').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-1").addEventListener("click", function() { envoyer("larmor", 1, "Jakkri"); });
+    (function() {
+      var btns1 = document.querySelectorAll('#interet-1 .ibtn');
+      btns1.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns1.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-1').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-2").addEventListener("click", function() { envoyer("larmor", 2, "Claude"); });
+    (function() {
+      var btns2 = document.querySelectorAll('#interet-2 .ibtn');
+      btns2.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns2.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-2').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-3").addEventListener("click", function() { envoyer("larmor", 3, "Marie"); });
+    (function() {
+      var btns3 = document.querySelectorAll('#interet-3 .ibtn');
+      btns3.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns3.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-3').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-4").addEventListener("click", function() { envoyer("larmor", 4, "Cetes"); });
+    (function() {
+      var btns4 = document.querySelectorAll('#interet-4 .ibtn');
+      btns4.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns4.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-4').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-5").addEventListener("click", function() { envoyer("larmor", 5, "Titi"); });
+    (function() {
+      var btns5 = document.querySelectorAll('#interet-5 .ibtn');
+      btns5.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns5.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-5').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-6").addEventListener("click", function() { envoyer("larmor", 6, "Vincent"); });
+    (function() {
+      var btns6 = document.querySelectorAll('#interet-6 .ibtn');
+      btns6.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns6.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-6').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-7").addEventListener("click", function() { envoyer("larmor", 7, "Violette"); });
+    (function() {
+      var btns7 = document.querySelectorAll('#interet-7 .ibtn');
+      btns7.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns7.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-7').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-8").addEventListener("click", function() { envoyer("larmor", 8, "Brigitte"); });
+    (function() {
+      var btns8 = document.querySelectorAll('#interet-8 .ibtn');
+      btns8.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns8.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-8').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-9").addEventListener("click", function() { envoyer("larmor", 9, "Gilles"); });
+    (function() {
+      var btns9 = document.querySelectorAll('#interet-9 .ibtn');
+      btns9.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns9.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-9').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-10").addEventListener("click", function() { envoyer("larmor", 10, "Mary"); });
+    (function() {
+      var btns10 = document.querySelectorAll('#interet-10 .ibtn');
+      btns10.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns10.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-10').style.display = 'block';
+          });
+        });
+      });
+    })();
+    document.getElementById("btn-larmor-11").addEventListener("click", function() { envoyer("larmor", 11, "R\u00e9gis"); });
+    (function() {
+      var btns11 = document.querySelectorAll('#interet-11 .ibtn');
+      btns11.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var labels = ['😐 Pourquoi pas', '😊 Intéressé·e', '🔥 Coup de cœur'];
+          var val = parseInt(this.dataset.val);
+          var pseudo = this.dataset.pseudo;
+          btns11.forEach(function(b) { b.classList.remove('ibtn-selected'); });
+          this.classList.add('ibtn-selected');
+          var fd = new FormData();
+          fd.append('access_key', 'd42b8d9d-a52c-4888-a489-5dd59b1b0f5b');
+          fd.append('subject', 'Larmor-Plage • Intérêt ' + pseudo + ' • ' + labels[val]);
+          fd.append('profil', pseudo);
+          fd.append('interet', labels[val]);
+          fd.append('evenement', 'Soirée Larmor-Plage — 2 avril 2026');
+          fetch('https://api.web3forms.com/submit', { method:'POST', body:fd, headers:{'Accept':'application/json'} }).finally(function() {
+            document.getElementById('isuc-11').style.display = 'block';
+          });
+        });
+      });
+    })();
+  var larmorPages = document.querySelectorAll('#book-larmor .page');
+  larmorPages[0].style.display = 'block';
+  larmorPages[0].classList.add('active');
+  initDots('larmor');
+});
+</script>
+</body>
+</html>
